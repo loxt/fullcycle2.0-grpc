@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/loxt/fullcycle2.0-grpc/pb"
+	"github.com/loxt/fullcycle2.0-grpc/services"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -14,9 +16,9 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
+	pb.RegisterUserServiceServer(grpcServer, services.NewUserService())
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Could not serve: %v", err)
 	}
-
 }
