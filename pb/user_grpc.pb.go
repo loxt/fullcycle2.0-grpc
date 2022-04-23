@@ -21,7 +21,7 @@ type UserServiceClient interface {
 	AddUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*User, error)
 	AddUserVerbose(ctx context.Context, in *User, opts ...grpc.CallOption) (UserService_AddUserVerboseClient, error)
 	AddUsers(ctx context.Context, opts ...grpc.CallOption) (UserService_AddUsersClient, error)
-	AddUsersStreamBoth(ctx context.Context, opts ...grpc.CallOption) (UserService_AddUsersStreamBothClient, error)
+	AddUserStreamBoth(ctx context.Context, opts ...grpc.CallOption) (UserService_AddUserStreamBothClient, error)
 }
 
 type userServiceClient struct {
@@ -107,30 +107,30 @@ func (x *userServiceAddUsersClient) CloseAndRecv() (*Users, error) {
 	return m, nil
 }
 
-func (c *userServiceClient) AddUsersStreamBoth(ctx context.Context, opts ...grpc.CallOption) (UserService_AddUsersStreamBothClient, error) {
-	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[2], "/pb.UserService/AddUsersStreamBoth", opts...)
+func (c *userServiceClient) AddUserStreamBoth(ctx context.Context, opts ...grpc.CallOption) (UserService_AddUserStreamBothClient, error) {
+	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[2], "/pb.UserService/AddUserStreamBoth", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &userServiceAddUsersStreamBothClient{stream}
+	x := &userServiceAddUserStreamBothClient{stream}
 	return x, nil
 }
 
-type UserService_AddUsersStreamBothClient interface {
+type UserService_AddUserStreamBothClient interface {
 	Send(*User) error
 	Recv() (*UserResultStream, error)
 	grpc.ClientStream
 }
 
-type userServiceAddUsersStreamBothClient struct {
+type userServiceAddUserStreamBothClient struct {
 	grpc.ClientStream
 }
 
-func (x *userServiceAddUsersStreamBothClient) Send(m *User) error {
+func (x *userServiceAddUserStreamBothClient) Send(m *User) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *userServiceAddUsersStreamBothClient) Recv() (*UserResultStream, error) {
+func (x *userServiceAddUserStreamBothClient) Recv() (*UserResultStream, error) {
 	m := new(UserResultStream)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -145,7 +145,7 @@ type UserServiceServer interface {
 	AddUser(context.Context, *User) (*User, error)
 	AddUserVerbose(*User, UserService_AddUserVerboseServer) error
 	AddUsers(UserService_AddUsersServer) error
-	AddUsersStreamBoth(UserService_AddUsersStreamBothServer) error
+	AddUserStreamBoth(UserService_AddUserStreamBothServer) error
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -162,8 +162,8 @@ func (UnimplementedUserServiceServer) AddUserVerbose(*User, UserService_AddUserV
 func (UnimplementedUserServiceServer) AddUsers(UserService_AddUsersServer) error {
 	return status.Errorf(codes.Unimplemented, "method AddUsers not implemented")
 }
-func (UnimplementedUserServiceServer) AddUsersStreamBoth(UserService_AddUsersStreamBothServer) error {
-	return status.Errorf(codes.Unimplemented, "method AddUsersStreamBoth not implemented")
+func (UnimplementedUserServiceServer) AddUserStreamBoth(UserService_AddUserStreamBothServer) error {
+	return status.Errorf(codes.Unimplemented, "method AddUserStreamBoth not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -243,25 +243,25 @@ func (x *userServiceAddUsersServer) Recv() (*User, error) {
 	return m, nil
 }
 
-func _UserService_AddUsersStreamBoth_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(UserServiceServer).AddUsersStreamBoth(&userServiceAddUsersStreamBothServer{stream})
+func _UserService_AddUserStreamBoth_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(UserServiceServer).AddUserStreamBoth(&userServiceAddUserStreamBothServer{stream})
 }
 
-type UserService_AddUsersStreamBothServer interface {
+type UserService_AddUserStreamBothServer interface {
 	Send(*UserResultStream) error
 	Recv() (*User, error)
 	grpc.ServerStream
 }
 
-type userServiceAddUsersStreamBothServer struct {
+type userServiceAddUserStreamBothServer struct {
 	grpc.ServerStream
 }
 
-func (x *userServiceAddUsersStreamBothServer) Send(m *UserResultStream) error {
+func (x *userServiceAddUserStreamBothServer) Send(m *UserResultStream) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *userServiceAddUsersStreamBothServer) Recv() (*User, error) {
+func (x *userServiceAddUserStreamBothServer) Recv() (*User, error) {
 	m := new(User)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -293,8 +293,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 		{
-			StreamName:    "AddUsersStreamBoth",
-			Handler:       _UserService_AddUsersStreamBoth_Handler,
+			StreamName:    "AddUserStreamBoth",
+			Handler:       _UserService_AddUserStreamBoth_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
